@@ -1,19 +1,28 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>POS DZ</title>
+<title>POS DZ — نظام نقطة البيع</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=IBM+Plex+Mono:wght@400;600&family=Tajawal:wght@300;400;500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=IBM+Plex+Mono:wght@400;600&family=Tajawal:wght@300;400;500;700&family=Poppins:wght@300;400;600;700&family=Amiri:wght@400;700&family=Readex+Pro:wght@300;400;600;700&family=Noto+Kufi+Arabic:wght@400;700&family=Raleway:wght@300;400;600;700&family=Montserrat:wght@300;400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- شاشة تسجيل الدخول -->
+<!-- ═══════════════════════════════════════════
+     شاشة تسجيل الدخول
+═══════════════════════════════════════════ -->
 <div id="loginScreen" class="loginBox">
+
+  <!-- خلفية متحركة -->
+  <div class="login-bg-particles">
+    <span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+  </div>
+
+  <!-- شعار وعنوان -->
   <div class="login-brand">
     <div class="login-logo-ring">
       <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,29 +35,74 @@
       </svg>
     </div>
     <h1 class="login-title">POS <span>DZ</span></h1>
-    <p class="login-sub">نظام نقطة البيع الذكي</p>
+    <p class="login-sub">نظام نقطة البيع الذكي — لوازم الحلويات والتغليف</p>
   </div>
+
+  <!-- بطاقة الدخول -->
   <div class="login-card">
-    <h3 data-i18n="login_title">تسجيل الدخول</h3>
-    <div class="input-group">
-      <span class="input-icon">👤</span>
-      <select id="userSelect"></select>
+    <div class="login-card-header">
+      <div class="login-card-icon">🔐</div>
+      <h3 data-i18n="login_title">تسجيل الدخول</h3>
     </div>
+
+    <!-- اختيار المستخدم — مضمون دائماً -->
+    <div class="input-group" id="userSelectGroup">
+      <span class="input-icon">👤</span>
+      <select id="userSelect" required></select>
+      <span class="input-chevron">▾</span>
+    </div>
+
+    <!-- حقل PIN — مضمون دائماً -->
     <div class="input-group" id="pinGroup">
       <span class="input-icon">🔑</span>
-      <input id="pin" type="password" placeholder="رمز PIN" data-i18n-placeholder="pin_placeholder" maxlength="4">
+      <input id="pin" type="password" placeholder="رمز PIN (4 أرقام)"
+             data-i18n-placeholder="pin_placeholder" maxlength="4"
+             autocomplete="off" inputmode="numeric">
       <button type="button" class="pin-toggle" onclick="togglePinVisibility()" title="إظهار/إخفاء">
-        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
       </button>
     </div>
-    <button class="btn-login" onclick="login()" data-i18n="login_btn">دخول</button>
-    <div id="loginMsg" class="login-msg"></div>
+
+    <!-- زر الدخول -->
+    <button class="btn-login" onclick="login()" data-i18n="login_btn">
+      <span class="btn-login-icon">→</span>
+      <span>دخول</span>
+    </button>
+
+    <!-- رسائل الخطأ/النجاح -->
+    <div id="loginMsg" class="login-msg" role="alert"></div>
+
+    <!-- زر طوارئ -->
+    <button id="emergencyResetBtn" onclick="emergencyReset()"
+      style="display:none;margin-top:16px;background:transparent;border:1px dashed #ef4444;
+             color:#ef4444;font-size:12px;padding:8px 14px;border-radius:10px;
+             cursor:pointer;width:100%;transition:all 0.2s">
+      🚨 إعادة ضبط طارئة (في حال مشكلة الدخول)
+    </button>
   </div>
+
+  <!-- شريط إصدار -->
+  <div class="login-version-bar">
+    <span>v2.0.0</span>
+    <span class="login-version-dot"></span>
+    <span>POS DZ © 2026</span>
+    <span class="login-version-dot"></span>
+    <span>بوس ديزاد</span>
+  </div>
+
 </div>
 
-<!-- التطبيق الرئيسي -->
+<!-- ═══════════════════════════════════════════
+     التطبيق الرئيسي
+═══════════════════════════════════════════ -->
 <div id="mainApp" style="display:none;">
 
+  <!-- ─── الهيدر ─── -->
   <header>
     <div class="header-right">
       <div class="header-brand">
@@ -62,187 +116,603 @@
         </div>
       </div>
     </div>
+
+    <!-- وسط الهيدر: مؤشرات سريعة -->
+    <div class="header-center" id="headerKPI">
+      <div class="hkpi" id="hkpiSales" title="مبيعات اليوم">
+        <span class="hkpi-icon">🛒</span>
+        <span class="hkpi-val" id="hkpiSalesVal">0</span>
+      </div>
+      <div class="hkpi-sep"></div>
+      <div class="hkpi" id="hkpiRevenue" title="إيرادات اليوم">
+        <span class="hkpi-icon">💰</span>
+        <span class="hkpi-val" id="hkpiRevenueVal">0 دج</span>
+      </div>
+    </div>
+
     <div class="header-left">
-      <button id="menuBtn" class="menu-trigger">
+      <div class="header-posdz-logo">POS <span>DZ</span></div>
+      <!-- زر المستخدم الحالي -->
+      <div class="header-user-badge" id="headerUserBadge" title="المستخدم الحالي">
+        <span class="huser-avatar" id="huserAvatar">👤</span>
+        <span class="huser-name" id="huserName">—</span>
+      </div>
+      <button id="menuBtn" class="menu-trigger" aria-label="القائمة الرئيسية">
         <span></span><span></span><span></span>
       </button>
       <nav id="sideMenu" class="hidden">
-        <div class="menu-header-label">القائمة الرئيسية</div>
+        <div class="menu-header-label">
+          <span>القائمة الرئيسية</span>
+          <button class="menu-close-btn" onclick="document.getElementById('sideMenu').classList.add('hidden')">✕</button>
+        </div>
         <ul>
-          <li onclick="show('sale')"      data-i18n="menu_sale"><span class="menu-icon">🛒</span><span class="menu-text">واجهة البيع</span></li>
-          <li onclick="show('stock')"     data-i18n="menu_stock" data-role="manager"><span class="menu-icon">📦</span><span class="menu-text">المخزون</span></li>
-          <li onclick="show('customers')" data-i18n="menu_customers"><span class="menu-icon">👥</span><span class="menu-text">الزبائن</span></li>
-          <li onclick="show('alerts')"    data-i18n="menu_users" data-role="manager"><span class="menu-icon">👤</span><span class="menu-text">إدارة المستخدمين</span></li>
-          <li onclick="show('reports')"   data-i18n="menu_reports" data-role="manager"><span class="menu-icon">📊</span><span class="menu-text">إدارة الأعمال</span></li>
-          <li onclick="show('settings')"  data-i18n="menu_settings" data-role="manager"><span class="menu-icon">⚙️</span><span class="menu-text">الإعدادات</span></li>
-          <li class="menu-logout" onclick="logout()" data-i18n="logout"><span class="menu-icon">🚪</span><span class="menu-text">خروج</span></li>
+          <li onclick="show('sale')"      data-i18n="menu_sale">
+            <span class="menu-icon">🛒</span><span class="menu-text">واجهة البيع</span>
+            <span class="menu-arrow">›</span>
+          </li>
+          <li onclick="show('stock')"     data-i18n="menu_stock" data-role="manager">
+            <span class="menu-icon">📦</span><span class="menu-text">المخزون</span>
+            <span class="menu-arrow">›</span>
+          </li>
+          <li onclick="show('suppliers')" data-role="manager">
+            <span class="menu-icon">🚚</span><span class="menu-text">الموردون</span>
+            <span class="menu-arrow">›</span>
+          </li>
+          <li onclick="show('customers')" data-i18n="menu_customers">
+            <span class="menu-icon">👥</span><span class="menu-text">الزبائن</span>
+            <span class="menu-arrow">›</span>
+          </li>
+          <li onclick="show('alerts')"    data-i18n="menu_users" data-role="manager">
+            <span class="menu-icon">👤</span><span class="menu-text">إدارة المستخدمين</span>
+            <span class="menu-arrow">›</span>
+          </li>
+          <li onclick="show('reports')"   data-i18n="menu_reports" data-role="manager">
+            <span class="menu-icon">📊</span><span class="menu-text">إدارة الأعمال</span>
+            <span class="menu-arrow">›</span>
+          </li>
+          <li onclick="show('settings')"  data-i18n="menu_settings" data-role="manager">
+            <span class="menu-icon">⚙️</span><span class="menu-text">الإعدادات</span>
+            <span class="menu-arrow">›</span>
+          </li>
+          <li class="menu-logout" onclick="logout()" data-i18n="logout">
+            <span class="menu-icon">🚪</span><span class="menu-text">خروج</span>
+          </li>
         </ul>
+        <div class="menu-footer">
+          <span>POS DZ v2.0.0</span>
+        </div>
       </nav>
     </div>
   </header>
 
-  <!-- واجهة البيع -->
+  <!-- ═══════════════════════════════════════════
+       واجهة البيع
+  ═══════════════════════════════════════════ -->
   <section id="sale" class="page active">
+
     <div class="page-header">
-      <h3 data-i18n="sale_title">واجهة البيع</h3>
+      <h3 data-i18n="sale_title">
+        <span class="page-header-icon">🛒</span> واجهة البيع
+      </h3>
+      <div class="page-header-actions">
+        <span class="sale-date-chip" id="saleDateChip"></span>
+      </div>
     </div>
+
+    <!-- شريط البحث والإضافة -->
     <div class="sale-search-wrap">
-      <div class="search-box">
+      <div class="search-box" id="saleSearchBox">
         <span class="search-icon">🔍</span>
-        <input id="search" placeholder="اسم أو باركود" data-i18n-placeholder="search_placeholder" autocomplete="off" oninput="searchSuggestions()">
+        <input id="search"
+               placeholder="اسم المنتج أو الباركود..."
+               data-i18n-placeholder="search_placeholder"
+               autocomplete="off"
+               oninput="searchSuggestions()">
+        <div class="search-qty-wrap">
+          <label class="search-qty-label">كمية</label>
+          <input id="searchQty" type="number" min="1" value="1"
+                 title="الكمية"
+                 class="search-qty-input">
+        </div>
+        <button type="button"
+                onclick="startBarcodeScanner('sale')"
+                class="btn-scan"
+                title="مسح الباركود أو QR Code">
+          📷 <span>مسح</span>
+        </button>
         <button onclick="addItem()" class="btn-add" data-i18n="add_btn">➕ إضافة</button>
       </div>
       <div id="searchSuggestions" class="search-suggestions hidden"></div>
     </div>
+
+    <!-- جدول السلة -->
     <div class="cart-container">
       <table>
         <thead>
           <tr>
-            <th data-i18n="col_item">سلعة</th>
+            <th data-i18n="col_item">🏷️ سلعة</th>
             <th data-i18n="col_qty">كمية</th>
-            <th data-i18n="col_price">سعر</th>
-            <th data-i18n="col_total">مجموع</th>
-            <th data-i18n="col_options">خيارات</th>
+            <th data-i18n="col_price">سعر الوحدة</th>
+            <th data-i18n="col_total">المجموع</th>
+            <th data-i18n="col_options">⚙️</th>
           </tr>
         </thead>
         <tbody id="cart"></tbody>
       </table>
+      <!-- حالة السلة الفارغة -->
+      <div class="cart-empty-state" id="cartEmptyState">
+        <div class="cart-empty-icon">🛒</div>
+        <div class="cart-empty-text">السلة فارغة</div>
+        <div class="cart-empty-sub">ابحث عن منتج لإضافته</div>
+      </div>
     </div>
+
+    <!-- زر تفريغ السلة -->
+    <div class="cart-clear-row">
+      <button id="clearCartBtn" onclick="clearCart()"
+              style="display:none"
+              class="btn-clear-cart">
+        🗑️ تفريغ السلة
+      </button>
+    </div>
+
+    <!-- شريط الإجمالي -->
     <div class="total-bar">
-      <span data-i18n="col_total">المجموع</span>
+      <div class="total-bar-left">
+        <span class="total-label" data-i18n="col_total">المجموع الكلي</span>
+        <span class="total-items-count" id="totalItemsCount">0 صنف</span>
+      </div>
       <span id="total" class="total-val">0</span>
     </div>
+
+    <!-- شريط الخصم -->
+    <div class="discount-bar" id="discountBar">
+      <span class="discount-label">🏷️ خصم:</span>
+      <div class="discount-controls">
+        <input id="discountVal" type="number" min="0" value="0"
+               placeholder="0" class="discount-input"
+               oninput="updateTotal()">
+        <select id="discountType" class="discount-type" onchange="updateTotal()">
+          <option value="fixed">دج ثابت</option>
+          <option value="percent">% نسبة</option>
+        </select>
+      </div>
+      <span id="afterDiscount" class="after-discount-val"></span>
+    </div>
+
+    <!-- منطقة الدفع -->
     <div class="payment-grid">
       <div class="input-group">
         <span class="input-icon">💵</span>
-        <input id="paid" placeholder="المبلغ المدفوع" data-i18n-placeholder="paid_placeholder" type="number" style="flex:1">
+        <input id="paid" placeholder="المبلغ المدفوع"
+               data-i18n-placeholder="paid_placeholder"
+               type="number" style="flex:1">
       </div>
       <div class="input-group">
         <span class="input-icon">👤</span>
         <select id="custSelect" style="flex:1"></select>
       </div>
     </div>
+
+    <!-- أزرار الدفع -->
     <div class="pay-actions">
-      <button onclick="pay()"     class="pay-btn green" data-i18n="pay_btn">✅ تسديد</button>
-      <button onclick="partial()" class="pay-btn orange" data-i18n="partial_btn">💰 جزئي</button>
-      <button onclick="toDebt()"  class="pay-btn red" id="debtBtn" data-i18n="debt_btn">📋 دين</button>
+      <button onclick="pay()"     class="pay-btn green"  data-i18n="pay_btn">
+        <span class="pay-btn-icon">✅</span> تسديد
+      </button>
+      <button onclick="partial()" class="pay-btn orange" data-i18n="partial_btn">
+        <span class="pay-btn-icon">💰</span> جزئي
+      </button>
+      <button onclick="toDebt()"  class="pay-btn red"    id="debtBtn" data-i18n="debt_btn">
+        <span class="pay-btn-icon">📋</span> دين
+      </button>
     </div>
   </section>
 
-  <!-- ============== المخزون ============== -->
+  <!-- ═══════════════════════════════════════════
+       المخزون
+  ═══════════════════════════════════════════ -->
   <section id="stock" class="page">
     <div class="page-header">
-      <button class="backBtn" onclick="goBack()">⬅ <span data-i18n="back">الرجوع</span></button>
-      <h3 data-i18n="menu_stock">📦 المخزون</h3>
-    </div>
-    <div class="stock-tabs">
-      <button class="sktab active" onclick="switchStockTab('families',this)" data-i18n="tab_families">📁 العائلات</button>
-      <button class="sktab" onclick="switchStockTab('brands',this)"          data-i18n="tab_brands">🏷️ الماركات</button>
-      <button class="sktab" onclick="switchStockTab('all',this)"             data-i18n="tab_all_stock">📋 كل السلع</button>
+      <button class="backBtn" onclick="goBack()">
+        <span class="back-arrow">⬅</span>
+        <span data-i18n="back">الرجوع</span>
+      </button>
+      <h3><span class="page-header-icon">📦</span> المخزون</h3>
     </div>
 
-    <div id="stockFamilies" class="stock-panel active">
-      <h4 data-i18n="families_title">📁 العائلات — نوع المنتج</h4>
-      <div class="input-row">
-        <input id="familyInput" placeholder="أدخل اسم العائلة..." data-i18n-placeholder="family_ph">
-        <button onclick="addFamily()" data-i18n="add_family">➕ إضافة</button>
-      </div>
-      <ul id="familyList"></ul>
+    <!-- شريط تنبيهات المخزون -->
+    <div id="stockAlertBanner" class="stock-alert-banner" style="display:none"></div>
+
+    <!-- شريط التنقل -->
+    <div class="stock-nav-bar">
+      <button class="snav-btn active" id="snavAll" onclick="switchStockView('all',this)">
+        <span class="snav-icon">📋</span>
+        <span class="snav-text">كل المنتجات</span>
+      </button>
+      <button class="snav-btn" id="snavAdd" onclick="switchStockView('add',this)">
+        <span class="snav-icon">➕</span>
+        <span class="snav-text">إضافة منتج</span>
+      </button>
+      <button class="snav-btn" id="snavFamilies" onclick="switchStockView('families',this)">
+        <span class="snav-icon">📁</span>
+        <span class="snav-text">العائلات</span>
+      </button>
+      <button class="snav-btn" id="snavImport" onclick="switchStockView('import',this)">
+        <span class="snav-icon">🔄</span>
+        <span class="snav-text">استيراد / تصدير</span>
+      </button>
     </div>
 
-    <div id="stockBrands" class="stock-panel">
-      <h4 data-i18n="brands_title">🏷️ الماركات — عائلة المنتج</h4>
-      <div class="input-row flex-wrap">
-        <input id="brandInput" placeholder="أدخل اسم الماركة..." data-i18n-placeholder="brand_ph">
-        <select id="brandFamilySelect">
-          <option value="">— اختر العائلة —</option>
-        </select>
-        <button onclick="addBrand()" data-i18n="add_brand">➕ إضافة</button>
-      </div>
-      <ul id="brandList"></ul>
-    </div>
-
-    <div id="stockAll" class="stock-panel">
-      <h4 data-i18n="add_product_title">➕ إضافة منتج جديد</h4>
-      <div class="form-grid">
-        <div>
-          <label class="set-label" data-i18n="family_label">العائلة</label>
-          <select id="type"><option value="">— العائلة —</option></select>
+    <!-- القسم 1: كل المنتجات -->
+    <div id="stockViewAll" class="stock-view active">
+      <div class="sv-toolbar">
+        <div class="search-box small" style="flex:1;margin:0">
+          <span class="search-icon">🔍</span>
+          <input id="stockSearch"
+                 placeholder="بحث بالاسم أو الباركود أو العائلة..."
+                 oninput="renderStock()"
+                 autocomplete="off">
         </div>
-        <div>
-          <label class="set-label" data-i18n="brand_label">الماركة</label>
-          <select id="brand"><option value="">— الماركة —</option></select>
-        </div>
-        <div>
-          <label class="set-label" data-i18n="size_label">الحجم / المقاس</label>
-          <input id="size" placeholder="مثال: 1L، XL، 500g">
-        </div>
-        <div>
-          <label class="set-label" data-i18n="barcode_label">باركود</label>
-          <input id="barcode" placeholder="باركود المنتج">
-        </div>
-        <div>
-          <label class="set-label" data-i18n="price_label">سعر البيع</label>
-          <input id="price" placeholder="0.00" type="number" min="0" step="0.01">
-        </div>
-        <div>
-          <label class="set-label" data-i18n="cost_label">سعر الشراء</label>
-          <input id="costPrice" placeholder="0.00" type="number" min="0" step="0.01">
-        </div>
-        <div>
-          <label class="set-label" data-i18n="qty_label">الكمية</label>
-          <input id="qty" placeholder="0" type="number" min="0">
-        </div>
-        <div>
-          <label class="set-label" data-i18n="exp_label">تاريخ الصلاحية</label>
-          <input id="exp" type="date">
-        </div>
-      </div>
-      <button onclick="saveItem()" data-i18n="save_item" class="btn-save-item">💾 حفظ المنتج</button>
-      <hr class="divider">
-      <h4 data-i18n="all_products">📋 كل المنتجات</h4>
-      <div class="search-box small">
-        <span class="search-icon">🔍</span>
-        <input id="stockSearch" placeholder="بحث في المخزون..." data-i18n-placeholder="stock_search_ph" oninput="renderStock()">
+        <div id="sv-stats" class="sv-stats"></div>
       </div>
       <ul id="stockList"></ul>
     </div>
+
+    <!-- القسم 2: إضافة منتج -->
+    <div id="stockViewAdd" class="stock-view">
+      <div class="sadd-card">
+
+        <!-- منطقة الباركود -->
+        <div class="sadd-barcode-zone">
+          <div class="sadd-barcode-icon">🔍</div>
+          <div class="sadd-barcode-info">
+            <div class="sadd-barcode-title">
+              الباركود <span class="sadd-required">مهم</span>
+            </div>
+            <div class="sadd-barcode-hint">
+              امسح الباركود بجهاز السكانر أو أدخله يدوياً — يجب أن يتطابق مع المنتج تماماً
+            </div>
+          </div>
+          <div class="sadd-barcode-field-wrap" style="display:flex;gap:8px">
+            <input id="barcode"
+                   placeholder="امسح أو أدخل الباركود..."
+                   class="sadd-barcode-field"
+                   autocomplete="off"
+                   spellcheck="false"
+                   style="flex:1">
+            <button type="button" id="scanBarcodeBtn"
+                    onclick="startBarcodeScanner('product')"
+                    class="btn-scan-product"
+                    title="فتح الكاميرا لمسح الباركود أو QR Code">
+              📷 مسح
+            </button>
+          </div>
+        </div>
+
+        <!-- حقول المنتج -->
+        <div class="sadd-fields">
+          <div class="sadd-section-title">📋 بيانات المنتج — تُدخل يدوياً</div>
+          <div class="form-grid">
+            <div>
+              <label class="set-label">العائلة <span style="color:var(--danger)">*</span></label>
+              <select id="type" onchange="updateBrandSelectByFamily()">
+                <option value="">— اختر العائلة —</option>
+              </select>
+            </div>
+            <div>
+              <label class="set-label">الماركة <span style="color:var(--danger)">*</span></label>
+              <input id="brand" placeholder="أدخل اسم الماركة..." type="text" required>
+            </div>
+            <div>
+              <label class="set-label">الحجم / المقاس / السعة</label>
+              <input id="size" placeholder="مثال: 1L، XL، 500g">
+            </div>
+            <div>
+              <label class="set-label">الوحدة</label>
+              <select id="unit">
+                <option value="قطعة">قطعة</option>
+                <option value="كيلو">كيلو</option>
+                <option value="غرام">غرام</option>
+                <option value="لتر">لتر</option>
+                <option value="رول">رول</option>
+                <option value="علبة">علبة</option>
+                <option value="كرتون">كرتون</option>
+                <option value="متر">متر</option>
+                <option value="عبوة">عبوة</option>
+              </select>
+            </div>
+            <div>
+              <label class="set-label">سعر البيع <span style="color:var(--danger)">*</span></label>
+              <input id="price" placeholder="0.00" type="number" min="0" step="0.01">
+            </div>
+            <div>
+              <label class="set-label">سعر الشراء</label>
+              <input id="costPrice" placeholder="0.00" type="number" min="0" step="0.01">
+            </div>
+            <div>
+              <label class="set-label">الكمية <span style="color:var(--danger)">*</span></label>
+              <input id="qty" placeholder="0" type="number" min="0">
+            </div>
+            <div>
+              <label class="set-label">تاريخ الصلاحية</label>
+              <input id="exp" type="date">
+            </div>
+          </div>
+          <div class="sadd-actions">
+            <button onclick="clearStockAddForm()" class="btn-sadd-clear">↺ تفريغ الحقول</button>
+            <button onclick="saveItem()"           class="btn-sadd-save">💾 حفظ المنتج</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- القسم 3: العائلات -->
+    <div id="stockViewFamilies" class="stock-view">
+      <div class="fam-card">
+        <div class="fam-card-head">
+          <span>📁 العائلات — فئات المنتجات</span>
+          <span class="fam-badge" id="famCounter">0</span>
+        </div>
+        <div class="fam-add-row">
+          <input id="familyInput" placeholder="اسم العائلة الجديدة...">
+          <button onclick="addFamily()" class="btn-fam-add">➕ إضافة</button>
+        </div>
+        <div class="search-box small" style="margin-bottom:10px">
+          <span class="search-icon">🔍</span>
+          <input id="stockDynSearch"
+                 placeholder="بحث في العائلات..."
+                 oninput="stockDynFilter()"
+                 autocomplete="off">
+        </div>
+        <ul id="familyList"></ul>
+      </div>
+      <!-- عناصر مخفية مطلوبة للنظام -->
+      <div style="display:none">
+        <ul id="brandList"></ul>
+        <input id="brandInput">
+        <select id="brandFamilySelect"><option value="">—</option></select>
+      </div>
+    </div>
+
+    <!-- القسم 4: استيراد / تصدير -->
+    <div id="stockViewImport" class="stock-view">
+      <div class="ie2-grid">
+
+        <!-- استيراد -->
+        <div class="ie2-card ie2-import">
+          <div class="ie2-icon">📂</div>
+          <div class="ie2-title">استيراد المنتجات</div>
+          <div class="ie2-desc">
+            عند وجود منتج مشابه، سيُطلب منك التأكيد: قبول التحديث أو تجاهل المنتج.<br>
+            بعد الاستيراد تنتقل تلقائياً لقسم "كل المنتجات".
+          </div>
+          <button onclick="document.getElementById('csvImportInput').click()"
+                  class="btn-ie2 btn-ie2-import">
+            📂 اختيار ملف للاستيراد
+          </button>
+          <input type="file" id="csvImportInput"
+                 accept=".csv,.xlsx,.xls"
+                 style="display:none"
+                 onchange="importProductsSmartNew(this)">
+          <div class="ie2-format">
+            <div class="ie2-format-label">📋 تنسيق الملف:</div>
+            <code>عائلة, ماركة, حجم, باركود, سعر_بيع, سعر_شراء, كمية, وحدة, صلاحية</code>
+          </div>
+          <button onclick="downloadCSVTemplate()" class="btn-ie2-template">
+            ⬇️ تحميل نموذج CSV
+          </button>
+        </div>
+
+        <!-- تصدير -->
+        <div class="ie2-card ie2-export">
+          <div class="ie2-icon">📤</div>
+          <div class="ie2-title">تصدير المخزون</div>
+          <div class="ie2-desc">
+            تصدير جميع المنتجات من المخزون على شكل ملف CSV جاهز للاستخدام.
+          </div>
+          <div class="ie2-export-stats" id="ie2Stats">
+            <span>📦 <strong id="ie2Count">0</strong> منتج في المخزون</span>
+          </div>
+          <button onclick="exportStockCSV()" class="btn-ie2 btn-ie2-export">
+            📤 تصدير CSV
+          </button>
+        </div>
+
+      </div>
+    </div>
+
   </section>
 
-  <!-- الزبائن -->
+  <!-- ═══════════════════════════════════════════
+       الموردون
+  ═══════════════════════════════════════════ -->
+  <section id="suppliers" class="page">
+    <div class="page-header">
+      <button class="backBtn" onclick="goBack()">
+        <span class="back-arrow">⬅</span>
+        <span data-i18n="back">الرجوع</span>
+      </button>
+      <h3><span class="page-header-icon">🚚</span> الموردون</h3>
+    </div>
+
+    <div class="cust-tabs">
+      <button class="ctab active" onclick="switchSupTab('list',this)">
+        🚚 قائمة الموردين
+      </button>
+      <button class="ctab" onclick="switchSupTab('orders',this)">
+        📦 سجل المشتريات
+      </button>
+    </div>
+
+    <!-- تبويب 1: الموردون -->
+    <div id="supTabList" class="cust-panel active">
+      <div class="card-panel" style="margin-bottom:14px">
+        <h4 class="card-panel-title">➕ إضافة مورد جديد</h4>
+        <div class="form-grid">
+          <div>
+            <label class="set-label">اسم المورد</label>
+            <input id="supName" placeholder="اسم المورد أو الشركة">
+          </div>
+          <div>
+            <label class="set-label">رقم الهاتف</label>
+            <input id="supPhone" placeholder="0XXX XXX XXX" type="tel">
+          </div>
+          <div>
+            <label class="set-label">المنتجات المورَّدة</label>
+            <input id="supProducts" placeholder="مثال: حلويات، نايلون، بسكويت...">
+          </div>
+          <div>
+            <label class="set-label">ملاحظات</label>
+            <input id="supNotes" placeholder="ملاحظات إضافية">
+          </div>
+        </div>
+        <button onclick="addSupplier()" style="margin-top:8px">➕ إضافة المورد</button>
+      </div>
+      <ul id="supList" style="margin-top:4px"></ul>
+    </div>
+
+    <!-- تبويب 2: سجل المشتريات -->
+    <div id="supTabOrders" class="cust-panel">
+      <div class="card-panel" style="margin-bottom:14px">
+        <h4 class="card-panel-title">📦 تسجيل عملية شراء</h4>
+        <div class="form-grid">
+          <div>
+            <label class="set-label">المورد</label>
+            <select id="orderSupplier" style="width:100%">
+              <option value="">— اختر المورد —</option>
+            </select>
+          </div>
+          <div>
+            <label class="set-label">تاريخ الشراء</label>
+            <input type="date" id="orderDate">
+          </div>
+          <div>
+            <label class="set-label">المبلغ الإجمالي</label>
+            <input id="orderTotal" type="number" min="0" placeholder="0.00">
+          </div>
+          <div>
+            <label class="set-label">المبلغ المدفوع</label>
+            <input id="orderPaid" type="number" min="0" placeholder="0.00">
+          </div>
+          <div style="grid-column:1/-1">
+            <label class="set-label">تفاصيل البضاعة</label>
+            <input id="orderDetails"
+                   placeholder="مثال: 50 كرتون مرهبا 250g + 20 رول نايلون...">
+          </div>
+        </div>
+        <button onclick="addOrder()" style="margin-top:8px">💾 تسجيل الشراء</button>
+      </div>
+      <ul id="orderList" style="margin-top:4px"></ul>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       الزبائن
+  ═══════════════════════════════════════════ -->
   <section id="customers" class="page">
     <div class="page-header">
-      <button class="backBtn" onclick="goBack()">⬅ <span data-i18n="back">الرجوع</span></button>
-      <h3 data-i18n="menu_customers">👥 الزبائن</h3>
+      <button class="backBtn" onclick="goBack()">
+        <span class="back-arrow">⬅</span>
+        <span data-i18n="back">الرجوع</span>
+      </button>
+      <h3 data-i18n="menu_customers">
+        <span class="page-header-icon">👥</span> الزبائن
+      </h3>
     </div>
-    <div class="input-row">
-      <input id="cname" placeholder="اسم الزبون" data-i18n-placeholder="customer_ph">
-      <button onclick="addCustomer()" data-i18n="add_btn">➕ إضافة</button>
+
+    <!-- تبويبات قسم الزبائن -->
+    <div class="cust-tabs">
+      <button class="ctab active" onclick="switchCustTab('list',this)">
+        👥 قائمة الزبائن
+      </button>
+      <button class="ctab" onclick="switchCustTab('debts',this)">
+        📋 تتبع الديون
+      </button>
     </div>
-    <ul id="clist" style="margin-top:12px"></ul>
+
+    <!-- تبويب 1: قائمة الزبائن -->
+    <div id="custTabList" class="cust-panel active">
+      <div class="card-panel" style="margin-bottom:14px">
+        <h4 class="card-panel-title">➕ إضافة زبون جديد</h4>
+        <div class="input-row">
+          <input id="cname"
+                 placeholder="اسم الزبون"
+                 data-i18n-placeholder="customer_ph">
+          <input id="cphone"
+                 placeholder="رقم الهاتف (اختياري)"
+                 type="tel"
+                 style="max-width:200px">
+          <button onclick="addCustomer()">➕ إضافة</button>
+        </div>
+      </div>
+      <div class="search-box small" style="margin-bottom:12px">
+        <span class="search-icon">🔍</span>
+        <input id="customerSearch"
+               placeholder="بحث في الزبائن..."
+               oninput="renderCustomerList()"
+               autocomplete="off">
+      </div>
+      <ul id="clist" style="margin-top:4px"></ul>
+    </div>
+
+    <!-- تبويب 2: تتبع الديون -->
+    <div id="custTabDebts" class="cust-panel">
+      <!-- بطاقات ملخص الديون -->
+      <div class="cust-debt-summary">
+        <div class="cds-card red">
+          <span class="cds-icon">⚠️</span>
+          <span class="cds-label">إجمالي الديون</span>
+          <span class="cds-val" id="cTotalDebt">0</span>
+        </div>
+        <div class="cds-card indigo">
+          <span class="cds-icon">👥</span>
+          <span class="cds-label">عدد المدينين</span>
+          <span class="cds-val" id="cDebtCount">0</span>
+        </div>
+      </div>
+      <div class="search-box small" style="margin:12px 0">
+        <span class="search-icon">🔍</span>
+        <input id="debtSearch"
+               placeholder="بحث في الزبائن المدينين..."
+               oninput="renderDebts()"
+               autocomplete="off">
+      </div>
+      <ul id="debtList"></ul>
+    </div>
   </section>
 
-  <!-- إدارة المستخدمين -->
+  <!-- ═══════════════════════════════════════════
+       إدارة المستخدمين
+  ═══════════════════════════════════════════ -->
   <section id="alerts" class="page">
     <div class="page-header">
-      <button class="backBtn" onclick="goBack()">⬅ <span data-i18n="back">الرجوع</span></button>
-      <h3 data-i18n="menu_users">👤 إدارة المستخدمين</h3>
+      <button class="backBtn" onclick="goBack()">
+        <span class="back-arrow">⬅</span>
+        <span data-i18n="back">الرجوع</span>
+      </button>
+      <h3 data-i18n="menu_users">
+        <span class="page-header-icon">👤</span> إدارة المستخدمين
+      </h3>
     </div>
     <div class="card-panel">
-      <h4>➕ إضافة مستخدم جديد</h4>
+      <h4 class="card-panel-title">➕ إضافة مستخدم جديد</h4>
       <form id="addUserInAlerts" class="form-grid">
         <div>
           <label class="set-label">اسم المستخدم</label>
-          <input type="text" id="alertUserName" placeholder="اسم المستخدم" required>
+          <input type="text" id="alertUserName"
+                 placeholder="اسم المستخدم" required>
         </div>
         <div>
           <label class="set-label">PIN (4 أرقام)</label>
-          <input type="password" id="alertUserPin" placeholder="****" maxlength="4" required>
+          <input type="password" id="alertUserPin"
+                 placeholder="****" maxlength="4" required
+                 inputmode="numeric">
         </div>
         <div>
           <label class="set-label">الدور</label>
           <select id="alertUserRole">
-            <option value="baker" data-i18n="role_seller">بائع</option>
+            <option value="baker"   data-i18n="role_seller">بائع</option>
             <option value="manager" data-i18n="role_manager">مدير</option>
           </select>
         </div>
@@ -254,43 +724,164 @@
     <ul id="alertList" style="margin-top:12px"></ul>
   </section>
 
-  <!-- إدارة الأعمال -->
+  <!-- ═══════════════════════════════════════════
+       إدارة الأعمال
+  ═══════════════════════════════════════════ -->
   <section id="reports" class="page">
     <div class="page-header">
-      <button class="backBtn" onclick="goBack()">⬅ <span data-i18n="back">الرجوع</span></button>
-      <h3 data-i18n="menu_reports">📊 إدارة الأعمال</h3>
+      <button class="backBtn" onclick="goBack()">
+        <span class="back-arrow">⬅</span>
+        <span data-i18n="back">الرجوع</span>
+      </button>
+      <h3 data-i18n="menu_reports">
+        <span class="page-header-icon">📊</span> إدارة الأعمال
+      </h3>
     </div>
+
+    <!-- تبويبات الفترة الزمنية -->
     <div class="report-tabs">
       <button class="rtab active" onclick="switchReportTab('daily',this)"   data-i18n="tab_day">اليوم</button>
       <button class="rtab"        onclick="switchReportTab('weekly',this)"  data-i18n="tab_week">الأسبوع</button>
       <button class="rtab"        onclick="switchReportTab('monthly',this)" data-i18n="tab_month">الشهر</button>
       <button class="rtab"        onclick="switchReportTab('yearly',this)"  data-i18n="tab_year">السنة</button>
       <button class="rtab"        onclick="switchReportTab('all',this)"     data-i18n="tab_all">الكل</button>
+      <button class="rtab rtab-date" onclick="switchReportTab('custom',this)" title="بحث بالتاريخ">📅</button>
     </div>
-    <div class="report-cards">
-      <div class="rcard green"><span class="rcard-icon">🛒</span><span class="rcard-label" data-i18n="r_sales">عمليات البيع</span><span class="rcard-val" id="rSales">0</span></div>
-      <div class="rcard blue"><span class="rcard-icon">💰</span><span class="rcard-label" data-i18n="r_revenue">المداخيل</span><span class="rcard-val" id="rRevenue">0</span></div>
-      <div class="rcard orange"><span class="rcard-icon">🏷️</span><span class="rcard-label" data-i18n="r_cost">تكلفة الشراء</span><span class="rcard-val" id="rCost">0</span></div>
-      <div class="rcard purple"><span class="rcard-icon">📈</span><span class="rcard-label" data-i18n="r_profit">صافي الربح</span><span class="rcard-val" id="rProfit">0</span></div>
-      <div class="rcard red"><span class="rcard-icon">⚠️</span><span class="rcard-label" data-i18n="total_debts">إجمالي الديون</span><span class="rcard-val" id="rTotalDebt">0</span></div>
-      <div class="rcard indigo"><span class="rcard-icon">👥</span><span class="rcard-label" data-i18n="debtors_count">عدد المدينين</span><span class="rcard-val" id="rDebtCount">0</span></div>
+
+    <!-- بحث بالتاريخ المخصص -->
+    <div id="customDateRow" class="custom-date-row hidden">
+      <div class="custom-date-inner">
+        <label class="set-label">من تاريخ</label>
+        <input type="date" id="reportDateFrom" onchange="renderReports()">
+        <label class="set-label">إلى تاريخ</label>
+        <input type="date" id="reportDateTo" onchange="renderReports()">
+      </div>
     </div>
-    <div class="debt-section">
-      <h4 data-i18n="debts_title">📋 تتبع الديون</h4>
-      <ul id="debtList"></ul>
+
+    <!-- شريط إظهار/إخفاء الأرقام -->
+    <div class="reports-toggle-bar">
+      <span id="reportsToggleLabel" class="reports-period-label">📊 إجمالي اليوم</span>
+      <button class="btn-toggle-numbers"
+              onclick="toggleReportNumbers()"
+              id="btnToggleNumbers"
+              title="إظهار/إخفاء الأرقام">
+        👁️ إظهار الأرقام
+      </button>
     </div>
+
+    <!-- بطاقات الأرقام -->
+    <div id="reportCardsWrap" class="report-cards-wrap hidden">
+      <div class="report-cards">
+        <div class="rcard green">
+          <span class="rcard-icon">🛒</span>
+          <span class="rcard-label" data-i18n="r_sales">عمليات البيع</span>
+          <span class="rcard-val" id="rSales">0</span>
+        </div>
+        <div class="rcard blue">
+          <span class="rcard-icon">💰</span>
+          <span class="rcard-label" data-i18n="r_revenue">إجمالي المداخيل</span>
+          <span class="rcard-val" id="rRevenue">0</span>
+        </div>
+        <div class="rcard orange">
+          <span class="rcard-icon">🏷️</span>
+          <span class="rcard-label" data-i18n="r_cost">تكلفة الشراء</span>
+          <span class="rcard-val" id="rCost">0</span>
+        </div>
+        <div class="rcard purple">
+          <span class="rcard-icon">📈</span>
+          <span class="rcard-label" data-i18n="r_profit">صافي الربح</span>
+          <span class="rcard-val" id="rProfit">0</span>
+        </div>
+        <div class="rcard red">
+          <span class="rcard-icon">⚠️</span>
+          <span class="rcard-label" data-i18n="total_debts">إجمالي الديون</span>
+          <span class="rcard-val" id="rTotalDebt">0</span>
+        </div>
+        <div class="rcard indigo">
+          <span class="rcard-icon">👥</span>
+          <span class="rcard-label" data-i18n="debtors_count">عدد المدينين</span>
+          <span class="rcard-val" id="rDebtCount">0</span>
+        </div>
+        <div class="rcard green">
+          <span class="rcard-icon">💵</span>
+          <span class="rcard-label">نقد فعلي محصَّل</span>
+          <span class="rcard-val" id="rCashRevenue" style="color:#10b981">0</span>
+        </div>
+        <div class="rcard red">
+          <span class="rcard-icon">📋</span>
+          <span class="rcard-label">مبيعات بالدين</span>
+          <span class="rcard-val" id="rDebtRevenue" style="color:#ef4444">0</span>
+        </div>
+      </div>
+
+      <!-- مداخيل حسب المستخدم -->
+      <div class="user-revenue-section">
+        <h4>👤 المداخيل حسب المستخدم</h4>
+        <ul id="userRevenueList"></ul>
+      </div>
+    </div>
+
+    <!-- بطاقات الديون الثابتة -->
+    <div class="report-debt-summary">
+      <div class="rds-card">
+        <span>⚠️ إجمالي الديون</span>
+        <strong id="rTotalDebt2">0</strong>
+      </div>
+      <div class="rds-card indigo">
+        <span>👥 عدد المدينين</span>
+        <strong id="rDebtCount2">0</strong>
+      </div>
+    </div>
+
+    <!-- زر الإقفال اليومي -->
+    <button class="btn-daily-close" onclick="showDailyClose()">
+      ★ إقفال اليوم
+    </button>
+
+    <!-- تقرير المنتجات -->
+    <div class="card-panel" style="margin-top:16px">
+      <div class="card-panel-header">
+        <h4 class="card-panel-title" style="margin:0">📊 تقرير المنتجات</h4>
+        <div style="display:flex;gap:8px">
+          <button onclick="renderProductReport('top')"  id="btnTopProducts"  class="rptab active" style="font-size:13px;padding:6px 14px">🏆 الأكثر مبيعاً</button>
+          <button onclick="renderProductReport('slow')" id="btnSlowProducts" class="rptab"        style="font-size:13px;padding:6px 14px">🐢 الراكدة</button>
+          <button onclick="renderProductReport('low')"  id="btnLowProducts"  class="rptab"        style="font-size:13px;padding:6px 14px">⚠️ المخزون المنخفض</button>
+        </div>
+      </div>
+      <ul id="productReportList"></ul>
+    </div>
+
+    <!-- سجل العمليات -->
     <div style="margin-top:16px">
-      <h4 data-i18n="sales_log">📜 سجل العمليات</h4>
+      <div class="card-panel-header" style="margin-bottom:10px">
+        <h4 data-i18n="sales_log" style="margin:0">📜 سجل العمليات</h4>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button onclick="clearSalesData('month')"
+                  class="btn-clear-sales btn-clear-month"
+                  title="مسح بيانات هذا الشهر">🗑️ مسح الشهر</button>
+          <button onclick="clearSalesData('year')"
+                  class="btn-clear-sales btn-clear-year"
+                  title="مسح بيانات هذه السنة">🗑️ مسح السنة</button>
+        </div>
+      </div>
       <ul id="salesLog"></ul>
     </div>
   </section>
 
-  <!-- ============== الإعدادات ============== -->
+  <!-- ═══════════════════════════════════════════
+       الإعدادات
+  ═══════════════════════════════════════════ -->
   <section id="settings" class="page">
     <div class="page-header">
-      <button class="backBtn" onclick="goBack()">⬅ <span data-i18n="back">الرجوع</span></button>
-      <h3 data-i18n="menu_settings">⚙️ الإعدادات</h3>
+      <button class="backBtn" onclick="goBack()">
+        <span class="back-arrow">⬅</span>
+        <span data-i18n="back">الرجوع</span>
+      </button>
+      <h3 data-i18n="menu_settings">
+        <span class="page-header-icon">⚙️</span> الإعدادات
+      </h3>
     </div>
+
     <div class="settings-tabs">
       <button class="stab active" onclick="switchSettingsTab('app',this)"    data-i18n="stab_app">🖥️ البرنامج</button>
       <button class="stab"        onclick="switchSettingsTab('store',this)"  data-i18n="stab_store">🏪 المتجر</button>
@@ -350,11 +941,24 @@
 
       <label class="set-label">نوع الخط</label>
       <select id="sFontFamily" onchange="previewFont()">
-        <option value="Cairo">Cairo (عربي كلاسيك)</option>
-        <option value="Tajawal">Tajawal (عربي حديث)</option>
-        <option value="Poppins">Poppins (لاتيني أنيق)</option>
-        <option value="IBM Plex Mono">IBM Plex Mono (أحادي المسافة)</option>
+        <optgroup label="✦ خطوط عربية">
+          <option value="Cairo">Cairo — كايرو (كلاسيكي)</option>
+          <option value="Tajawal">Tajawal — تجوّل (حديث)</option>
+          <option value="Amiri">Amiri — أميري (تراثي)</option>
+          <option value="Readex Pro">Readex Pro — ريدكس (واضح)</option>
+          <option value="Noto Kufi Arabic">Noto Kufi — كوفي (رسمي)</option>
+        </optgroup>
+        <optgroup label="✦ خطوط لاتينية">
+          <option value="Poppins">Poppins — بوبينز (أنيق)</option>
+          <option value="Raleway">Raleway — راليوي (راقي)</option>
+          <option value="Montserrat">Montserrat — مونتسيرات</option>
+          <option value="Inter">Inter — إنتر (تقني)</option>
+          <option value="IBM Plex Mono">IBM Plex Mono (أحادي)</option>
+        </optgroup>
       </select>
+      <div id="fontPreviewBox" class="font-preview-box">
+        معاينة الخط: مرحباً بكم في POS DZ — Bonjour POS DZ
+      </div>
 
       <label class="set-label">حجم الخط</label>
       <div class="font-size-picker">
@@ -364,14 +968,79 @@
         <button class="fsz-btn" onclick="setFontSize(19)" data-size="19">كبير جداً</button>
       </div>
 
-      <!-- ألوان التطبيق -->
+      <!-- الصوت -->
+      <div class="settings-section-divider">🔊 إعدادات الصوت والرنين</div>
+      <div class="sound-settings-card">
+        <div class="sound-option">
+          <div class="sound-option-info">
+            <span class="sound-icon">🛒</span>
+            <div>
+              <div class="sound-option-title">صوت إضافة المنتج</div>
+              <div class="sound-option-desc">رنين عند إضافة منتج للعربة</div>
+            </div>
+          </div>
+          <label class="toggle-label">
+            <input type="checkbox" id="sSoundAdd" class="toggle-input" onchange="saveSoundSettings()">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="sound-option">
+          <div class="sound-option-info">
+            <span class="sound-icon">✅</span>
+            <div>
+              <div class="sound-option-title">صوت إتمام البيع</div>
+              <div class="sound-option-desc">رنين عند إتمام عملية البيع بنجاح</div>
+            </div>
+          </div>
+          <label class="toggle-label">
+            <input type="checkbox" id="sSoundPay" class="toggle-input" onchange="saveSoundSettings()">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <button onclick="testSound('add')" style="background:#3b82f6;padding:7px 14px;font-size:13px">🔊 تجربة صوت الإضافة</button>
+          <button onclick="testSound('pay')" style="background:#10b981;padding:7px 14px;font-size:13px">🔊 تجربة صوت البيع</button>
+        </div>
+      </div>
+
+      <!-- الباركود -->
+      <div class="settings-section-divider">📷 قارئ الباركود</div>
+      <div class="sound-settings-card">
+        <div class="sound-option">
+          <div class="sound-option-info">
+            <span class="sound-icon">📷</span>
+            <div>
+              <div class="sound-option-title">تفعيل قارئ الباركود</div>
+              <div class="sound-option-desc">حجز المنتجات تلقائياً بجهاز الباركود</div>
+            </div>
+          </div>
+          <label class="toggle-label">
+            <input type="checkbox" id="sBarcodeReader" class="toggle-input" onchange="saveSoundSettings()">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <p style="font-size:12px;color:var(--text3);margin:6px 0 0">
+          ℹ️ المنتجات التي تحمل باركوداً تُحجز تلقائياً — المنتجات بدون باركود تُحجز يدوياً.
+        </p>
+      </div>
+
+      <!-- الألوان -->
       <label class="set-label">لون واجهة التطبيق</label>
       <div class="theme-picker">
         <button class="theme-swatch active" data-theme="default" onclick="setTheme('default')" style="background:linear-gradient(135deg,#6366f1,#a855f7)" title="بنفسجي (الافتراضي)"></button>
-        <button class="theme-swatch" data-theme="ocean" onclick="setTheme('ocean')" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)" title="أزرق"></button>
+        <button class="theme-swatch" data-theme="ocean"   onclick="setTheme('ocean')"   style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)" title="أزرق"></button>
         <button class="theme-swatch" data-theme="emerald" onclick="setTheme('emerald')" style="background:linear-gradient(135deg,#10b981,#059669)" title="أخضر"></button>
-        <button class="theme-swatch" data-theme="sunset" onclick="setTheme('sunset')" style="background:linear-gradient(135deg,#f59e0b,#ef4444)" title="برتقالي-أحمر"></button>
+        <button class="theme-swatch" data-theme="sunset"  onclick="setTheme('sunset')"  style="background:linear-gradient(135deg,#f59e0b,#ef4444)" title="برتقالي-أحمر"></button>
+        <button class="theme-swatch" data-theme="dark"    onclick="setTheme('dark')"    style="background:linear-gradient(135deg,#0f172a,#334155);border:2px solid #6366f1" title="داكن 🌙"></button>
       </div>
+
+      <!-- إعدادات المخزون -->
+      <div class="settings-section-divider">📦 إعدادات المخزون</div>
+      <label class="set-label">حد تنبيه المخزون المنخفض</label>
+      <input id="sLowStockThreshold" type="number" min="1" max="100" placeholder="5" style="width:120px">
+      <p style="font-size:12px;color:var(--text3);margin:4px 0 12px">
+        يُنبَّه عند وصول كمية أي منتج لهذا الحد أو أقل (الافتراضي: 5)
+      </p>
 
       <button onclick="saveSettingsApp()" style="margin-top:16px" data-i18n="save_app">💾 حفظ إعدادات البرنامج</button>
       <div id="msgSettingsApp" class="toast-msg"></div>
@@ -382,10 +1051,16 @@
       <h4 data-i18n="stab_store">🏪 بيانات المتجر</h4>
       <label class="set-label" data-i18n="logo_label">شعار المتجر</label>
       <div class="logo-upload-box">
-        <img id="logoPreview" src="" alt="" style="display:none;max-height:80px;border-radius:8px;margin-bottom:8px">
-        <input type="file" id="logoInput" accept="image/*" onchange="previewLogo(this)" style="display:none">
-        <button onclick="document.getElementById('logoInput').click()" style="background:#6366f1" data-i18n="upload_logo">📷 تحميل الشعار</button>
-        <button onclick="removeLogo()" style="background:#ef4444;margin-right:8px" data-i18n="remove_logo">🗑️ حذف</button>
+        <img id="logoPreview" src="" alt=""
+             style="display:none;max-height:80px;border-radius:8px;margin-bottom:8px">
+        <input type="file" id="logoInput" accept="image/*"
+               onchange="previewLogo(this)" style="display:none">
+        <button onclick="document.getElementById('logoInput').click()"
+                style="background:#6366f1"
+                data-i18n="upload_logo">📷 تحميل الشعار</button>
+        <button onclick="removeLogo()"
+                style="background:#ef4444;margin-right:8px"
+                data-i18n="remove_logo">🗑️ حذف</button>
       </div>
       <label class="set-label" data-i18n="shop_name">اسم المتجر</label>
       <input id="sname" placeholder="اسم المحل">
@@ -394,7 +1069,9 @@
       <label class="set-label" data-i18n="address_label">العنوان</label>
       <input id="saddr" placeholder="العنوان">
       <label class="set-label" data-i18n="welcome_label">رسالة ترحيب للفاتورة</label>
-      <textarea id="sWelcome" rows="3" style="width:100%;padding:10px;border-radius:6px;border:1px solid #d1d5db;resize:vertical" placeholder="شكراً لزيارتكم!"></textarea>
+      <textarea id="sWelcome" rows="3"
+                style="width:100%;padding:10px;border-radius:var(--radius-sm);border:1.5px solid var(--border);resize:vertical;font-family:var(--font)"
+                placeholder="شكراً لزيارتكم!"></textarea>
       <button onclick="saveSettingsStore()" style="margin-top:12px" data-i18n="save_store">💾 حفظ بيانات المتجر</button>
       <div id="msgSettingsStore" class="toast-msg"></div>
     </div>
@@ -407,11 +1084,18 @@
           <label class="set-label" data-i18n="invoice_num">رقم الفاتورة الحالي</label>
           <input id="sInvoiceNum" type="number" placeholder="1" min="1">
           <label class="set-label" data-i18n="printer_label">اختيار الطابعة</label>
-          <select id="sPrinter">
-            <option value="default">الطابعة الافتراضية</option>
-            <option value="thermal">طابعة حرارية (Thermal)</option>
-            <option value="inkjet">طابعة عادية (Inkjet/Laser)</option>
-          </select>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px">
+            <select id="sPrinter" style="flex:1;margin:0">
+              <option value="default">الطابعة الافتراضية</option>
+              <option value="thermal">طابعة حرارية (Thermal)</option>
+              <option value="inkjet">طابعة عادية (Inkjet/Laser)</option>
+            </select>
+            <button onclick="searchForPrinters()"
+                    style="background:#6366f1;padding:9px 14px;font-size:13px;white-space:nowrap">
+              🔍 بحث عن طابعة
+            </button>
+          </div>
+          <div id="printerSearchStatus" style="font-size:12px;color:var(--text3);margin-bottom:8px"></div>
           <label class="set-label" data-i18n="paper_size">مقاس الورق</label>
           <select id="sPaperSize">
             <option value="58mm">58 مم</option>
@@ -422,12 +1106,30 @@
           <label class="set-label" data-i18n="copies_label">عدد النسخ</label>
           <input id="sCopies" type="number" min="1" max="10" placeholder="1">
           <div class="check-group">
-            <label class="check-label"><input type="checkbox" id="sPrintLogo">            <span data-i18n="print_logo">طباعة شعار المتجر</span></label>
-            <label class="check-label"><input type="checkbox" id="sPrintShopName" checked><span data-i18n="print_name">طباعة اسم المتجر</span></label>
-            <label class="check-label"><input type="checkbox" id="sPrintPhone" checked>   <span data-i18n="print_phone">طباعة رقم الهاتف</span></label>
-            <label class="check-label"><input type="checkbox" id="sPrintWelcome" checked> <span data-i18n="print_welcome">طباعة رسالة الترحيب</span></label>
-            <label class="check-label"><input type="checkbox" id="sPrintBarcode">         <span data-i18n="print_barcode">طباعة باركود المنتجات</span></label>
-            <label class="check-label"><input type="checkbox" id="sPrintCustBarcode">     <span data-i18n="print_cust_barcode">طباعة باركود الفاتورة</span></label>
+            <label class="check-label">
+              <input type="checkbox" id="sPrintLogo">
+              <span data-i18n="print_logo">طباعة شعار المتجر</span>
+            </label>
+            <label class="check-label">
+              <input type="checkbox" id="sPrintShopName" checked>
+              <span data-i18n="print_name">طباعة اسم المتجر</span>
+            </label>
+            <label class="check-label">
+              <input type="checkbox" id="sPrintPhone" checked>
+              <span data-i18n="print_phone">طباعة رقم الهاتف</span>
+            </label>
+            <label class="check-label">
+              <input type="checkbox" id="sPrintWelcome" checked>
+              <span data-i18n="print_welcome">طباعة رسالة الترحيب</span>
+            </label>
+            <label class="check-label">
+              <input type="checkbox" id="sPrintBarcode">
+              <span data-i18n="print_barcode">طباعة باركود المنتجات</span>
+            </label>
+            <label class="check-label">
+              <input type="checkbox" id="sPrintCustBarcode">
+              <span data-i18n="print_cust_barcode">طباعة باركود الفاتورة</span>
+            </label>
           </div>
           <button onclick="saveSettingsPrint()" style="margin-top:12px" data-i18n="save_print">💾 حفظ إعدادات الطباعة</button>
           <div id="msgSettingsPrint" class="toast-msg"></div>
@@ -444,20 +1146,47 @@
       <h4 data-i18n="stab_system">🔧 إعدادات النظام</h4>
       <div class="system-card">
         <h5 data-i18n="auto_backup_title">💾 سجل العمليات والنسخ التلقائي</h5>
-        <p style="font-size:13px;color:#6b7280;margin:0 0 12px" data-i18n="auto_backup_desc">تفعيل النسخ اليومي التلقائي لبيانات التطبيق.</p>
+        <p style="font-size:13px;color:#6b7280;margin:0 0 12px" data-i18n="auto_backup_desc">
+          تفعيل النسخ اليومي التلقائي لبيانات التطبيق.
+        </p>
         <label class="toggle-label">
           <input type="checkbox" id="sAutoBackup" class="toggle-input" onchange="toggleAutoBackup(this.checked)">
           <span class="toggle-slider"></span>
           <span data-i18n="auto_backup_toggle" style="margin-right:10px">تفعيل النسخ اليومي التلقائي</span>
         </label>
         <div id="backupStatus" style="margin-top:10px;font-size:13px;color:#6b7280"></div>
-        <button onclick="manualBackup()" style="margin-top:12px;background:#6366f1" data-i18n="manual_backup">📥 نسخ احتياطي الآن</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+          <button onclick="manualBackup()" style="background:#6366f1" data-i18n="manual_backup">📥 نسخ احتياطي الآن</button>
+          <button onclick="document.getElementById('backupImportInput').click()" style="background:#10b981">📤 استيراد نسخة</button>
+          <input type="file" id="backupImportInput" accept=".json" style="display:none" onchange="importBackup(this)">
+        </div>
         <div id="msgBackup" class="toast-msg"></div>
       </div>
       <hr style="margin:28px 0 20px;border:none;border-top:2px solid #fee2e2">
-      <div class="system-card danger-card">
-        <button onclick="confirmReset()" class="reset-btn" data-i18n="reset_btn">🔴 إعادة ضبط النظام</button>
-        <p class="danger-warning" data-i18n="reset_warning">⚠️ تحذير: هذا الجزء سيقوم بحذف جميع البيانات وإعادة البرنامج لحالته الأصلية.</p>
+      <div class="system-card">
+        <h5>🗑️ إدارة البيانات</h5>
+        <p style="font-size:13px;color:#6b7280;margin:0 0 16px">خيارات مسح البيانات بشكل انتقائي أو كلي.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.3);border-radius:var(--radius-sm);padding:14px">
+            <div style="font-weight:800;font-size:14px;color:#d97706;margin-bottom:6px">🧹 المسح الجزئي</div>
+            <div style="font-size:13px;color:#6b7280;margin-bottom:10px">
+              يمسح: المبيعات، الديون، سجل العمليات. <strong>لا يمسح:</strong> أسماء المنتجات والماركات والعائلات.
+            </div>
+            <button onclick="confirmPartialReset()"
+                    style="background:linear-gradient(135deg,#f59e0b,#d97706);padding:10px 20px;font-size:13px;width:100%">
+              🧹 مسح جزئي للبيانات
+            </button>
+          </div>
+          <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.25);border-radius:var(--radius-sm);padding:14px">
+            <div style="font-weight:800;font-size:14px;color:#dc2626;margin-bottom:6px">🔴 المسح الكلي</div>
+            <div style="font-size:13px;color:#6b7280;margin-bottom:10px">
+              يمسح كل شيء: المصاريف، المنتجات، الزبائن، الديون، وكل البيانات.
+            </div>
+            <button onclick="confirmReset()" class="reset-btn" style="margin:0" data-i18n="reset_btn">
+              🔴 إعادة ضبط النظام الكلي
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -475,12 +1204,11 @@
           </svg>
         </div>
         <div class="about-title">POS DZ</div>
-        <div class="about-sub">نظام نقاط البيع الذكي</div>
+        <div class="about-sub">نظام نقاط البيع الذكي — لوازم الحلويات والتغليف</div>
         <div class="about-version-row">
-          <span class="about-badge">الإصدار: 1.0.0</span>
-          <span class="about-badge">تاريخ: 2026/02/20</span>
+          <span class="about-badge">الإصدار: 2.0.0</span>
+          <span class="about-badge">تاريخ: 2026/02/22</span>
         </div>
-
         <div class="about-license">
           <div class="about-license-title">حالة الترخيص 🔐</div>
           <div class="about-license-status">
@@ -488,33 +1216,31 @@
             <span>البرنامج مفعل</span>
           </div>
         </div>
-
         <div class="about-dev">
           <div class="about-dev-title">👤💻 المطور</div>
           <div class="about-dev-info">
-            <div>🏢 <strong>شركة:</strong> بوس زاد | ب.حمزة</div>
+            <div>🏢 <strong>شركة:</strong> بوس ديزاد | ب.حمزة</div>
             <div>📱 <strong>واتساب:</strong>
-              <a href="https://wa.me/213770044850" target="_blank" class="about-wa-link">+213.770044850</a>
+              <a href="https://wa.me/213770044850" target="_blank" class="about-wa-link">🇩🇿 0770044850</a>
             </div>
           </div>
         </div>
-
-        <div class="about-footer">
-          ®2026 بوس زاد - جميع الحقوق محفوظة
-        </div>
+        <div class="about-footer">® 2026 بوس ديزاد - جميع الحقوق محفوظة</div>
       </div>
     </div>
 
   </section>
 
-  <!-- مودال المستخدمين -->
+  <!-- ═══════════════════════════════════════════
+       مودال المستخدمين
+  ═══════════════════════════════════════════ -->
   <div id="usersModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeUsersModal()">&times;</span>
       <h2 data-i18n="menu_users">إدارة المستخدمين</h2>
       <form id="addUserForm">
         <input type="text"     id="newUserName" placeholder="اسم المستخدم" required>
-        <input type="password" id="newUserPin"  placeholder="PIN (4)" maxlength="4" required>
+        <input type="password" id="newUserPin"  placeholder="PIN (4)" maxlength="4" required inputmode="numeric">
         <select id="newUserRole">
           <option value="baker"   data-i18n="role_seller">بائع</option>
           <option value="manager" data-i18n="role_manager">مدير</option>
@@ -524,8 +1250,10 @@
       <table id="usersTable">
         <thead>
           <tr>
-            <th data-i18n="col_name">الاسم</th><th>PIN</th>
-            <th data-i18n="col_role">الدور</th><th data-i18n="col_options">خيارات</th>
+            <th data-i18n="col_name">الاسم</th>
+            <th>PIN</th>
+            <th data-i18n="col_role">الدور</th>
+            <th data-i18n="col_options">خيارات</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -533,10 +1261,37 @@
     </div>
   </div>
 
-  <!-- Toast notification -->
+  <!-- Toast الإشعارات -->
   <div id="globalToast" class="global-toast"></div>
 
-</div>
+  <!-- مودال الكاميرا/الباركود -->
+  <div id="scannerModal"
+       style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+              background:rgba(0,0,0,0.95);z-index:10000;padding:20px">
+    <div style="max-width:500px;margin:auto;height:100%;display:flex;
+                flex-direction:column;justify-content:center;align-items:center;gap:20px">
+      <div style="color:white;font-size:18px;text-align:center;font-weight:700">
+        📷 جاري المسح...
+      </div>
+      <video id="scannerVideo"
+             style="width:100%;max-width:400px;border:2px solid var(--success);border-radius:12px">
+      </video>
+      <canvas id="scannerCanvas" style="display:none"></canvas>
+      <div style="color:white;font-size:14px;text-align:center">
+        <div style="color:#94a3b8">وجّه الكاميرا نحو الباركود أو QR Code</div>
+        <button onclick="closeScannerModal()"
+                style="margin-top:20px;padding:12px 28px;background:#ef4444;color:white;
+                       border:none;border-radius:10px;cursor:pointer;font-weight:700;
+                       font-size:15px">
+          ✕ إلغاء
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /mainApp -->
+
+<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
