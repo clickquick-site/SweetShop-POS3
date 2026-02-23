@@ -753,7 +753,7 @@ window.alert = function(msg) {
   if (document.getElementById("mainApp").style.display === "none") {
     const lm = document.getElementById("loginMsg");
     if (lm) {
-      const isErr = /خاطئ|اختر|incorrect|Incorrect|Veuillez|sélectionnez/i.test(msg);
+      const isErr = /incorrect|Incorrect|Veuillez|sélectionnez/i.test(msg);
       lm.textContent = msg;
       lm.className = "login-msg " + (isErr ? "error" : "success");
       clearTimeout(lm._t);
